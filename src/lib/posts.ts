@@ -1,8 +1,6 @@
 // "use server";
 import "server-only";
 
-import { IPost } from "@/interfaces/posts";
-
 // import sql from "better-sqlite3";
 // const db = new sql("posts.db");
 
@@ -43,12 +41,12 @@ function initDb() {
   if (result.count === 0) {
     db.exec(`
     INSERT INTO users (first_name, last_name, email)
-    VALUES ('John', 'Doe', 'john@example.com')
+    VALUES ('Fahim', 'H', 'fahim@example.com')
   `);
 
     db.exec(`
     INSERT INTO users (first_name, last_name, email)
-    VALUES ('Max', 'Schwarz', 'max@example.com')
+    VALUES ('John', 'Doe', 'john@example.com')
   `);
   }
 }
@@ -75,7 +73,12 @@ export async function getPosts(maxNumber: number) {
   return maxNumber ? stmt.all(maxNumber) : stmt.all();
 }
 
-export async function storePost(post: IPost) {
+export async function storePost(post: {
+  image_url: string;
+  title: string;
+  content: string;
+  user_id?: number | null;
+}) {
   const stmt = db.prepare(`
     INSERT INTO posts (image_url, title, content, user_id)
     VALUES (?, ?, ?, ?)`);
